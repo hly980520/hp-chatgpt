@@ -1,6 +1,4 @@
-package com.huangpeng.chatgpt.sdk.data;
-
-import com.huangpeng.chatgpt.sdk.domain.CompletionsMessage;
+package com.huangpeng.chatgpt.sdk.domain;
 
 import java.util.List;
 
@@ -8,10 +6,10 @@ import java.util.List;
  * @Program: hp-chatgpt
  * @Description:
  * @author: peng.huang
- * @create: 2023-03-06 17:40:12
+ * @create: 2023-03-06 17:37:06
  **/
-public class ChatCompletionsData extends BaseCompletionsData{
-    private static final long serialVersionUID = -6802385716682036093L;
+public class Completions extends BaseCompletions {
+    private static final long serialVersionUID = 989745987522703986L;
 
     private List<Choice> choices;
 
@@ -25,12 +23,21 @@ public class ChatCompletionsData extends BaseCompletionsData{
 
     static class Choice {
 
+        private String text;
+
         private Integer index;
 
-        private CompletionsMessage message;
+        private Object logprobs;
 
         private String finish_reason;
 
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
 
         public Integer getIndex() {
             return index;
@@ -40,12 +47,12 @@ public class ChatCompletionsData extends BaseCompletionsData{
             this.index = index;
         }
 
-        public CompletionsMessage getMessage() {
-            return message;
+        public Object getLogprobs() {
+            return logprobs;
         }
 
-        public void setMessage(CompletionsMessage message) {
-            this.message = message;
+        public void setLogprobs(Object logprobs) {
+            this.logprobs = logprobs;
         }
 
         public String getFinish_reason() {

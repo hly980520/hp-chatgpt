@@ -1,2 +1,2 @@
 # hp-chatgpt
-chatgpt学习
+hp-chatgpt-sdk 

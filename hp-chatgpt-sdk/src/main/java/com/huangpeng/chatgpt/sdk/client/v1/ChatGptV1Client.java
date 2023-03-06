@@ -3,11 +3,9 @@ package com.huangpeng.chatgpt.sdk.client.v1;
 import com.alibaba.fastjson2.JSON;
 import com.google.common.base.Stopwatch;
 import com.huangpeng.chatgpt.sdk.constant.RequestHeadersConst;
-import com.huangpeng.chatgpt.sdk.data.ChatCompletionsData;
-import com.huangpeng.chatgpt.sdk.data.CompletionsData;
-import com.huangpeng.chatgpt.sdk.data.ModelData;
-import com.huangpeng.chatgpt.sdk.data.ModelsResult;
-import com.huangpeng.chatgpt.sdk.domain.GenerateImage;
+import com.huangpeng.chatgpt.sdk.domain.*;
+import com.huangpeng.chatgpt.sdk.params.v1.EditsV1Params;
+import com.huangpeng.chatgpt.sdk.result.ChatGptModelsResult;
 import com.huangpeng.chatgpt.sdk.params.v1.ChatCompletionsV1Params;
 import com.huangpeng.chatgpt.sdk.params.v1.CompletionsV1Params;
 import com.huangpeng.chatgpt.sdk.params.v1.GenerateImageV1Params;
@@ -42,7 +40,7 @@ public class ChatGptV1Client {
      * 获取模型列表
      * @return
      */
-    public List<ModelData> queryModelList() {
+    public List<ChatGptModel> queryModelList() {
 
         Request request = this.buildGetRequest(chatGptV1Properties.getUrlModels());
 
@@ -59,13 +57,13 @@ public class ChatGptV1Client {
                 logger.warn("queryModels: responseBody.string is null");
                 return null;
             }
-            ModelsResult modelsResult = JSON.parseObject(body, ModelsResult.class);
-            if (Objects.isNull(modelsResult)) {
+            ChatGptModelsResult chatGptModelsResult = JSON.parseObject(body, ChatGptModelsResult.class);
+            if (Objects.isNull(chatGptModelsResult)) {
                 logger.warn("queryModels: modelsResult is null");
                 return null;
             }
 
-            return modelsResult.getData();
+            return chatGptModelsResult.getData();
         } catch (Exception e) {
             logger.warn("queryModels: request exception, ", e);
             return null;
@@ -79,7 +77,7 @@ public class ChatGptV1Client {
      * @param id
      * @return
      */
-    public ModelData queryModelById(String id) {
+    public ChatGptModel queryModelById(String id) {
         Request request = this.buildGetRequest(chatGptV1Properties.getUrlModels() + "/" + id);
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
@@ -94,7 +92,7 @@ public class ChatGptV1Client {
                 logger.warn("queryModelById: responseBody.string is null");
                 return null;
             }
-            return JSON.parseObject(body, ModelData.class);
+            return JSON.parseObject(body, ChatGptModel.class);
         } catch (Exception e) {
             logger.warn("queryModelById: request exception, ", e);
             return null;
@@ -103,7 +101,7 @@ public class ChatGptV1Client {
         }
     }
 
-    public CompletionsData queryCompletions(CompletionsV1Params params) {
+    public Completions queryCompletions(CompletionsV1Params params) {
         Request request = this.buildPostRequest(chatGptV1Properties.getUrlCompletions(),
                 JSON.toJSONString(params));
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -120,7 +118,7 @@ public class ChatGptV1Client {
                 return null;
             }
 
-            return JSON.parseObject(body, CompletionsData.class);
+            return JSON.parseObject(body, Completions.class);
         } catch (Exception e) {
             logger.warn("queryCompletions: request exception, ", e);
             return null;
@@ -129,7 +127,7 @@ public class ChatGptV1Client {
         }
     }
 
-    public ChatCompletionsData chatCompletions(ChatCompletionsV1Params params) {
+    public ChatCompletions chatCompletions(ChatCompletionsV1Params params) {
         Request request = this.buildPostRequest(chatGptV1Properties.getUrlChatCompletions(),
                 JSON.toJSONString(params));
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -146,7 +144,7 @@ public class ChatGptV1Client {
                 return null;
             }
 
-            return JSON.parseObject(body, ChatCompletionsData.class);
+            return JSON.parseObject(body, ChatCompletions.class);
         } catch (Exception e) {
             logger.warn("chatCompletions: request exception, ", e);
             return null;
@@ -156,6 +154,43 @@ public class ChatGptV1Client {
     }
 
 
+    /**
+     * 只支持text-davinci-edit-001/code-davinci-edit-001
+     * @param params
+     * @return
+     */
+    public ChatGptEdits createdEdits(EditsV1Params params) {
+        Request request = this.buildPostRequest(chatGptV1Properties.getUrlEdits(),
+                JSON.toJSONString(params));
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        try {
+            Response response = chatGptHttpClient.newCall(request).execute();
+            ResponseBody responseBody = response.body();
+            if (Objects.isNull(responseBody)) {
+                logger.warn("createdEdits: responseBody is null");
+                return null;
+            }
+            String body = responseBody.string();
+            if (StringUtils.isEmpty(body)) {
+                logger.warn("createdEdits: responseBody.string is null, [params:{}]", JSON.toJSONString(params));
+                return null;
+            }
+
+            return JSON.parseObject(body, ChatGptEdits.class);
+        } catch (Exception e) {
+            logger.warn("createdEdits: request exception, [params:{} ]", JSON.toJSONString(params), e);
+            return null;
+        } finally {
+            logger.info("createdEdits: request end, costTime: {}", stopwatch.stop());
+        }
+    }
+
+
+    /**
+     * 生成图片
+     * @param params
+     * @return
+     */
     public List<GenerateImage> generateImages(GenerateImageV1Params params) {
         Request request = this.buildPostRequest(chatGptV1Properties.getUrlImagesGenerations(),
                 JSON.toJSONString(params));

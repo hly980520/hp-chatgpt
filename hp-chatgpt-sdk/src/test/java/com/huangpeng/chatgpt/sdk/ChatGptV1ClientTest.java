@@ -3,13 +3,10 @@ package com.huangpeng.chatgpt.sdk;
 import com.alibaba.fastjson2.JSON;
 import com.huangpeng.chatgpt.sdk.autoconfig.ChatGptSdkV1AutoConfiguration;
 import com.huangpeng.chatgpt.sdk.client.v1.ChatGptV1Client;
-import com.huangpeng.chatgpt.sdk.data.ChatCompletionsData;
-import com.huangpeng.chatgpt.sdk.data.CompletionsData;
-import com.huangpeng.chatgpt.sdk.data.ModelData;
-import com.huangpeng.chatgpt.sdk.domain.CompletionsMessage;
-import com.huangpeng.chatgpt.sdk.domain.GenerateImage;
+import com.huangpeng.chatgpt.sdk.domain.*;
 import com.huangpeng.chatgpt.sdk.params.v1.ChatCompletionsV1Params;
 import com.huangpeng.chatgpt.sdk.params.v1.CompletionsV1Params;
+import com.huangpeng.chatgpt.sdk.params.v1.EditsV1Params;
 import com.huangpeng.chatgpt.sdk.params.v1.GenerateImageV1Params;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -37,14 +34,14 @@ public class ChatGptV1ClientTest {
 
     @Test
     public void queryModelListTest() {
-        List<ModelData> modelDataList = chatGptV1Client.queryModelList();
-        logger.info(JSON.toJSONString(modelDataList));
+        List<ChatGptModel> chatGptModelList = chatGptV1Client.queryModelList();
+        logger.info(JSON.toJSONString(chatGptModelList));
     }
 
     @Test
     public void queryModelByIdTest() {
-        ModelData modelData = chatGptV1Client.queryModelById("babbage");
-        logger.info(JSON.toJSONString(modelData));
+        ChatGptModel chatGptModel = chatGptV1Client.queryModelById("babbage");
+        logger.info(JSON.toJSONString(chatGptModel));
     }
 
     @Test
@@ -54,7 +51,7 @@ public class ChatGptV1ClientTest {
         params.setPrompt("去你大爷");
         params.setTemperature(0);
         params.setMax_tokens(7);
-        CompletionsData completionsData = chatGptV1Client.queryCompletions(params);
+        Completions completionsData = chatGptV1Client.queryCompletions(params);
         logger.info(JSON.toJSONString(completionsData));
     }
 
@@ -66,7 +63,7 @@ public class ChatGptV1ClientTest {
         message.setContent("习近平");
         params.setModel("gpt-3.5-turbo");
         params.setMessages(Collections.singletonList(message));
-        ChatCompletionsData chatCompletionsData = chatGptV1Client.chatCompletions(params);
+        ChatCompletions chatCompletionsData = chatGptV1Client.chatCompletions(params);
         logger.info(JSON.toJSONString(chatCompletionsData));
     }
 
@@ -82,5 +79,16 @@ public class ChatGptV1ClientTest {
                 logger.info(generateImage.getUrl());
             }
         });
+    }
+
+    @Test
+    public void createdEditsTest() {
+        EditsV1Params params = new EditsV1Params();
+        params.setModel("code-davinci-edit-001");
+        params.setInput("你打爷是你大爷");
+        params.setInstruction("Fix the spelling mistakes");
+
+        ChatGptEdits chatGptEdits = chatGptV1Client.createdEdits(params);
+        logger.info(JSON.toJSONString(chatGptEdits));
     }
 }

@@ -1,8 +1,9 @@
-package com.huangpeng.chatgpt.sdk.data;
+package com.huangpeng.chatgpt.sdk.domain;
+
+import com.huangpeng.chatgpt.sdk.data.PermissionData;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @Program: hp-chatgpt
@@ -10,7 +11,7 @@ import java.util.Objects;
  * @author: peng.huang
  * @create: 2023-03-06 16:52:42
  **/
-public class ModelData implements Serializable {
+public class ChatGptModel implements Serializable {
     private static final long serialVersionUID = -3324468974760341378L;
 
     private String id;

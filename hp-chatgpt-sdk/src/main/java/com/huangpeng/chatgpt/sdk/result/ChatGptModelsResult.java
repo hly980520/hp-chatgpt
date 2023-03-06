@@ -1,4 +1,6 @@
-package com.huangpeng.chatgpt.sdk.data;
+package com.huangpeng.chatgpt.sdk.result;
+
+import com.huangpeng.chatgpt.sdk.domain.ChatGptModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,12 +11,12 @@ import java.util.List;
  * @author: peng.huang
  * @create: 2023-03-06 17:00:51
  **/
-public class ModelsResult implements Serializable {
+public class ChatGptModelsResult implements Serializable {
     private static final long serialVersionUID = -907534634636165484L;
 
     private String object;
 
-    private List<ModelData> data;
+    private List<ChatGptModel> data;
 
     public String getObject() {
         return object;
@@ -24,11 +26,11 @@ public class ModelsResult implements Serializable {
         this.object = object;
     }
 
-    public List<ModelData> getData() {
+    public List<ChatGptModel> getData() {
         return data;
     }
 
-    public void setData(List<ModelData> data) {
+    public void setData(List<ChatGptModel> data) {
         this.data = data;
     }
 }

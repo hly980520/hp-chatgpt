@@ -1,4 +1,6 @@
-package com.huangpeng.chatgpt.sdk.data;
+package com.huangpeng.chatgpt.sdk.domain;
+
+import com.huangpeng.chatgpt.sdk.data.UsageData;
 
 import java.io.Serializable;
 
@@ -8,7 +10,7 @@ import java.io.Serializable;
  * @author: peng.huang
  * @create: 2023-03-06 17:33:46
  **/
-public class BaseCompletionsData implements Serializable {
+public class BaseCompletions implements Serializable {
     private static final long serialVersionUID = 919975753233775490L;
 
     private String id;

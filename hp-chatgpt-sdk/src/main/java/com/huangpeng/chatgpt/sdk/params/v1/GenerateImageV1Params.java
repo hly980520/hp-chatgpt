@@ -12,20 +12,33 @@ public class GenerateImageV1Params implements Serializable {
     private static final long serialVersionUID = 2148370172854538410L;
 
     /**
-     * 图片主题
+     * A text description of the desired image(s). <br>
+     * The maximum length is 1000 characters.
      */
     private String prompt;
 
     /**
-     * 图片数量
+     * The number of images to generate. Must be between 1 and 10.
      */
     private Integer n;
 
     /**
      * 图片尺寸<br>
-     * 1024x1024
+     * The size of the generated images. Must be one of 256x256, 512x512, or 1024x1024.
      */
     private String size;
+
+    /**
+     * The format in which the generated images are returned. Must be one of url or b64_json.
+     */
+    private String response_format;
+
+    /**
+     * A unique identifier representing your end-user,
+     * which can help OpenAI to monitor and detect abuse.
+     * @see <a href="https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids">...</a>
+     */
+    private String user;
 
     public String getPrompt() {
         return prompt;
@@ -49,5 +62,21 @@ public class GenerateImageV1Params implements Serializable {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getResponse_format() {
+        return response_format;
+    }
+
+    public void setResponse_format(String response_format) {
+        this.response_format = response_format;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

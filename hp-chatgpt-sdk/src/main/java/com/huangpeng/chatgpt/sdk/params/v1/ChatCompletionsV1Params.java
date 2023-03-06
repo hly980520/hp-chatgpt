@@ -6,11 +6,11 @@ import java.util.List;
 
 /**
  * @Program: hp-chatgpt
- * @Description:
+ * @Description: 目前支持：gpt-3.5-turbo/gpt-3.5-turbo-0301
  * @author: peng.huang
  * @create: 2023-03-06 17:44:50
  **/
-public class ChatCompletionsV1Params extends BaseCompletionsV1Params{
+public class ChatCompletionsV1Params extends BaseParams{
     private static final long serialVersionUID = -83610918237889073L;
 
     private List<CompletionsMessage> messages;

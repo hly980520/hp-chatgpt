@@ -25,6 +25,8 @@ public class ChatGptV1Properties {
 
     private String urlImagesGenerations;
 
+    private String UrlEdits;
+
     public String getAuthorization() {
         return authorization;
     }
@@ -71,5 +73,13 @@ public class ChatGptV1Properties {
 
     public void setUrlImagesGenerations(String urlImagesGenerations) {
         this.urlImagesGenerations = urlImagesGenerations;
+    }
+
+    public String getUrlEdits() {
+        return UrlEdits;
+    }
+
+    public void setUrlEdits(String urlEdits) {
+        UrlEdits = urlEdits;
     }
 }
