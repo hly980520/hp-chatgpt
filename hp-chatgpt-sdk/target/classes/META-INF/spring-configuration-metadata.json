@@ -1,0 +1,42 @@
+{
+  "groups": [
+    {
+      "name": "hp.chatgpt.sdk.v1",
+      "type": "com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties",
+      "sourceType": "com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "hp.chatgpt.sdk.v1.authorization",
+      "type": "java.lang.String",
+      "sourceType": "com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties"
+    },
+    {
+      "name": "hp.chatgpt.sdk.v1.open-ai-organization",
+      "type": "java.lang.String",
+      "sourceType": "com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties"
+    },
+    {
+      "name": "hp.chatgpt.sdk.v1.url-chat-completions",
+      "type": "java.lang.String",
+      "sourceType": "com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties"
+    },
+    {
+      "name": "hp.chatgpt.sdk.v1.url-completions",
+      "type": "java.lang.String",
+      "sourceType": "com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties"
+    },
+    {
+      "name": "hp.chatgpt.sdk.v1.url-images-generations",
+      "type": "java.lang.String",
+      "sourceType": "com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties"
+    },
+    {
+      "name": "hp.chatgpt.sdk.v1.url-models",
+      "type": "java.lang.String",
+      "sourceType": "com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties"
+    }
+  ],
+  "hints": []
+}
