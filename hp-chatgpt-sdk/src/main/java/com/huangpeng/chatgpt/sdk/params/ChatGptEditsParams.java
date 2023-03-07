@@ -1,4 +1,4 @@
-package com.huangpeng.chatgpt.sdk.params.v1;
+package com.huangpeng.chatgpt.sdk.params;
 
 /**
  * @Program: hp-chatgpt
@@ -6,7 +6,7 @@ package com.huangpeng.chatgpt.sdk.params.v1;
  * @author: peng.huang
  * @create: 2023-03-06 21:03:05
  **/
-public class EditsV1Params extends BaseParams{
+public class ChatGptEditsParams extends BaseParams{
     private static final long serialVersionUID = -4660883764607345322L;
 
     /**

@@ -1,16 +1,15 @@
-package com.huangpeng.chatgpt.sdk.client.v1;
+package com.huangpeng.chatgpt.sdk.client;
 
 import com.alibaba.fastjson2.JSON;
 import com.google.common.base.Stopwatch;
 import com.huangpeng.chatgpt.sdk.constant.RequestHeadersConst;
 import com.huangpeng.chatgpt.sdk.domain.*;
-import com.huangpeng.chatgpt.sdk.params.v1.EditsV1Params;
+import com.huangpeng.chatgpt.sdk.params.*;
+import com.huangpeng.chatgpt.sdk.result.ChatGptAudioResult;
 import com.huangpeng.chatgpt.sdk.result.ChatGptModelsResult;
-import com.huangpeng.chatgpt.sdk.params.v1.ChatCompletionsV1Params;
-import com.huangpeng.chatgpt.sdk.params.v1.CompletionsV1Params;
-import com.huangpeng.chatgpt.sdk.params.v1.GenerateImageV1Params;
-import com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties;
-import com.huangpeng.chatgpt.sdk.result.GenerateImagesV1Result;
+import com.huangpeng.chatgpt.sdk.properties.ChatGptProperties;
+import com.huangpeng.chatgpt.sdk.result.GenerateImagesResult;
+import com.huangpeng.chatgpt.sdk.utils.HttpUtils;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,12 +25,12 @@ import java.util.Objects;
  * @author: peng.huang
  * @create: 2023-03-06 16:04:41
  **/
-public class ChatGptV1Client {
+public class ChatGptClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChatGptV1Client.class);
+    private static final Logger logger = LoggerFactory.getLogger(ChatGptClient.class);
 
     @Autowired
-    private ChatGptV1Properties chatGptV1Properties;
+    private ChatGptProperties chatGptProperties;
 
     @Autowired
     private OkHttpClient chatGptHttpClient;
@@ -42,7 +41,7 @@ public class ChatGptV1Client {
      */
     public List<ChatGptModel> queryModelList() {
 
-        Request request = this.buildGetRequest(chatGptV1Properties.getUrlModels());
+        Request request = HttpUtils.buildGetRequest(chatGptProperties, chatGptProperties.getUrlModels());
 
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
@@ -78,7 +77,7 @@ public class ChatGptV1Client {
      * @return
      */
     public ChatGptModel queryModelById(String id) {
-        Request request = this.buildGetRequest(chatGptV1Properties.getUrlModels() + "/" + id);
+        Request request = HttpUtils.buildGetRequest(chatGptProperties, chatGptProperties.getUrlModels() + "/" + id);
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
             Response response = chatGptHttpClient.newCall(request).execute();
@@ -101,8 +100,13 @@ public class ChatGptV1Client {
         }
     }
 
-    public Completions queryCompletions(CompletionsV1Params params) {
-        Request request = this.buildPostRequest(chatGptV1Properties.getUrlCompletions(),
+    /**
+     * 给定一个提示，该模型将返回一个或多个预测的完成，并且还可以返回每个位置的替代标记的概率
+     * @param params
+     * @return
+     */
+    public Completions queryCompletions(CompletionsParams params) {
+        Request request = HttpUtils.buildJsonPostRequest(chatGptProperties, chatGptProperties.getUrlCompletions(),
                 JSON.toJSONString(params));
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
@@ -127,8 +131,13 @@ public class ChatGptV1Client {
         }
     }
 
-    public ChatCompletions chatCompletions(ChatCompletionsV1Params params) {
-        Request request = this.buildPostRequest(chatGptV1Properties.getUrlChatCompletions(),
+    /**
+     * 给定聊天对话，模型将返回聊天完成响应。
+     * @param params
+     * @return
+     */
+    public ChatCompletions chatCompletions(ChatCompletionsParams params) {
+        Request request = HttpUtils.buildJsonPostRequest(chatGptProperties, chatGptProperties.getUrlChatCompletions(),
                 JSON.toJSONString(params));
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
@@ -156,11 +165,12 @@ public class ChatGptV1Client {
 
     /**
      * 只支持text-davinci-edit-001/code-davinci-edit-001
+     * 给定提示和指令，模型将返回提示的编辑版本。
      * @param params
      * @return
      */
-    public ChatGptEdits createdEdits(EditsV1Params params) {
-        Request request = this.buildPostRequest(chatGptV1Properties.getUrlEdits(),
+    public ChatGptEdits createdEdits(ChatGptEditsParams params) {
+        Request request = HttpUtils.buildJsonPostRequest(chatGptProperties, chatGptProperties.getUrlEdits(),
                 JSON.toJSONString(params));
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
@@ -187,12 +197,13 @@ public class ChatGptV1Client {
 
 
     /**
-     * 生成图片
+     *
+     * 根据提示创建图像
      * @param params
      * @return
      */
-    public List<GenerateImage> generateImages(GenerateImageV1Params params) {
-        Request request = this.buildPostRequest(chatGptV1Properties.getUrlImagesGenerations(),
+    public List<GenerateImage> generateImages(GenerateImageParams params) {
+        Request request = HttpUtils.buildJsonPostRequest(chatGptProperties, chatGptProperties.getUrlImagesGenerations(),
                 JSON.toJSONString(params));
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
@@ -208,9 +219,9 @@ public class ChatGptV1Client {
                 return null;
             }
 
-            GenerateImagesV1Result result = JSON.parseObject(body, GenerateImagesV1Result.class);
+            GenerateImagesResult result = JSON.parseObject(body, GenerateImagesResult.class);
             if (Objects.isNull(result)) {
-                logger.warn("generateImages: generateImagesV1Result is null");
+                logger.warn("generateImages: generateImagesResult is null");
                 return null;
             }
             return result.getData();
@@ -224,34 +235,45 @@ public class ChatGptV1Client {
 
 
     /**
-     * 构建post请求
-     * @param url
+     * 将音频转录为输入语言<br>
+     * 只支持whisper-1模型
+     * @param params
      * @return
      */
-    private Request buildPostRequest(String url, String requestBodyData) {
-        RequestBody body = RequestBody.create(requestBodyData,
-                MediaType.parse(RequestHeadersConst.MEDIA_TYPE_APPLICATION_JSON));
+    public String audioTranscriptions(AudioParams params) {
+        Request request = HttpUtils.buildFilePostRequest(
+                chatGptProperties,
+                chatGptProperties.getUrlAudioTranscriptions(),
+                params.getFile(),
+                params.getModel(),
+                params.getLanguage()
+        );
 
-        return new Request.Builder()
-                .url(url)
-                .header(RequestHeadersConst.CONTENT_TYPE, RequestHeadersConst.APPLICATION_JSON)
-                .header(RequestHeadersConst.AUTHORIZATION, chatGptV1Properties.getAuthorization())
-                .header(RequestHeadersConst.OPENAI_ORGANIZATION, chatGptV1Properties.getOpenAiOrganization())
-                .post(body)
-                .build();
-    }
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        try {
+            Response response = chatGptHttpClient.newCall(request).execute();
+            ResponseBody responseBody = response.body();
+            if (Objects.isNull(responseBody)) {
+                logger.warn("audioTranscriptions: responseBody is null");
+                return null;
+            }
+            String body = responseBody.string();
+            if (StringUtils.isEmpty(body)) {
+                logger.warn("audioTranscriptions: responseBody.string is null");
+                return null;
+            }
 
-    /**
-     * 构建get请求
-     * @param url
-     * @return
-     */
-    private Request buildGetRequest(String url) {
-        return new Request.Builder()
-                .url(url)
-                .header(RequestHeadersConst.AUTHORIZATION, chatGptV1Properties.getAuthorization())
-                .header(RequestHeadersConst.OPENAI_ORGANIZATION, chatGptV1Properties.getOpenAiOrganization())
-                .get()
-                .build();
+            ChatGptAudioResult result = JSON.parseObject(body, ChatGptAudioResult.class);
+            if (Objects.isNull(result)) {
+                logger.warn("audioTranscriptions: ChatGptAudioResult is null");
+                return null;
+            }
+            return result.getText();
+        } catch (Exception e) {
+            logger.warn("audioTranscriptions: request exception, ", e);
+            return null;
+        } finally {
+            logger.info("audioTranscriptions: request end, costTime: {}", stopwatch.stop());
+        }
     }
 }

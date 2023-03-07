@@ -1,4 +1,4 @@
-package com.huangpeng.chatgpt.sdk.params.v1;
+package com.huangpeng.chatgpt.sdk.params;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author: peng.huang
  * @create: 2023-03-06 18:11:42
  **/
-public class GenerateImageV1Params implements Serializable {
+public class GenerateImageParams implements Serializable {
     private static final long serialVersionUID = 2148370172854538410L;
 
     /**

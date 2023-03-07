@@ -1,7 +1,7 @@
 package com.huangpeng.chatgpt.sdk.autoconfig;
 
-import com.huangpeng.chatgpt.sdk.client.v1.ChatGptV1Client;
-import com.huangpeng.chatgpt.sdk.properties.v1.ChatGptV1Properties;
+import com.huangpeng.chatgpt.sdk.client.ChatGptClient;
+import com.huangpeng.chatgpt.sdk.properties.ChatGptProperties;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author peng.huang
  */
-@EnableConfigurationProperties({ChatGptV1Properties.class})
-public class ChatGptSdkV1AutoConfiguration {
+@EnableConfigurationProperties({ChatGptProperties.class})
+public class ChatGptSdkAutoConfiguration {
 
     @Autowired
     private Environment env;
@@ -32,8 +32,8 @@ public class ChatGptSdkV1AutoConfiguration {
                 .build();
     }
 
-    @Bean(name = "chatGptV1Client")
-    public ChatGptV1Client chatGptV1Client() {
-        return new ChatGptV1Client();
+    @Bean(name = "chatGptClient")
+    public ChatGptClient chatGptClient() {
+        return new ChatGptClient();
     }
 }

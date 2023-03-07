@@ -11,7 +11,7 @@ import java.util.List;
  * @author: peng.huang
  * @create: 2023-03-06 18:14:06
  **/
-public class GenerateImagesV1Result implements Serializable {
+public class GenerateImagesResult implements Serializable {
     private static final long serialVersionUID = -7056708934593809466L;
 
     private String created;

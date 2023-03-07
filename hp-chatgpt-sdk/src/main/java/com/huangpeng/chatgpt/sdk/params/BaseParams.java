@@ -1,4 +1,4 @@
-package com.huangpeng.chatgpt.sdk.params.v1;
+package com.huangpeng.chatgpt.sdk.params;
 
 import java.io.Serializable;
 
@@ -13,6 +13,7 @@ public class BaseParams implements Serializable {
 
     /**
      * 模型id
+     * @see com.huangpeng.chatgpt.sdk.constant.ModelConst
      */
     private String model;
 

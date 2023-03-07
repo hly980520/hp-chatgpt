@@ -1,4 +1,4 @@
-package com.huangpeng.chatgpt.sdk.properties.v1;
+package com.huangpeng.chatgpt.sdk.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -11,7 +11,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(
         prefix = "hp.chatgpt.sdk.v1"
 )
-public class ChatGptV1Properties {
+public class ChatGptProperties {
 
     private String authorization;
 
@@ -25,7 +25,9 @@ public class ChatGptV1Properties {
 
     private String urlImagesGenerations;
 
-    private String UrlEdits;
+    private String urlEdits;
+
+    private String urlAudioTranscriptions;
 
     public String getAuthorization() {
         return authorization;
@@ -76,10 +78,18 @@ public class ChatGptV1Properties {
     }
 
     public String getUrlEdits() {
-        return UrlEdits;
+        return urlEdits;
     }
 
     public void setUrlEdits(String urlEdits) {
-        UrlEdits = urlEdits;
+        this.urlEdits = urlEdits;
+    }
+
+    public String getUrlAudioTranscriptions() {
+        return urlAudioTranscriptions;
+    }
+
+    public void setUrlAudioTranscriptions(String urlAudioTranscriptions) {
+        this.urlAudioTranscriptions = urlAudioTranscriptions;
     }
 }
